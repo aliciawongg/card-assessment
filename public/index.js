@@ -23,7 +23,7 @@ async function createColumn() {
         const newColumn = document.createElement('my-column');
         newColumn.id = `${column.title}`;
         newColumn.innerHTML = `<h2>${column.title}</h2>`;
-        document.body.appendChild(newColumn);
+        document.querySelector('.container').appendChild(newColumn);
     })
 }
 
