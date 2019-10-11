@@ -23,10 +23,10 @@
       "columnId": 1
     },
     {
-      "id": 3,
-      "title": "Card 3",
-      "description": "Nulla porttitor erat a sollicitudin volutpat.",
-      "columnId": 1
+      "title": "",
+      "description": "",
+      "columnId": "",
+      "id": 3
     },
     {
       "id": 5,

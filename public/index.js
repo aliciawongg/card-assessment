@@ -55,7 +55,7 @@ async function getCardInfo() {
             ${card.title}<br/>
             Description: ${card.description}<br/>
             Column: ${card.columnId}<br/>
-            <button type="button" // data-toggle="modal" data-target="#editModal">Edit</button>
+            <button type="button" data-toggle="modal" data-target="#editModal" id=${card.id} onclick="retrieveCardDetails()">Edit</button>
             <input type="submit" value = "Delete" onclick="deleteCard(event)">
             <br/>`;
         if (card.columnId == 1) {
@@ -110,11 +110,33 @@ function deleteCard(event) {
 }
 
 //edit card
+function retrieveCardDetails() {
+    //console.log(event)
+    const retrieveId = event.target.id
+    console.log(retrieveId)
+    fetch('http://localhost:3000/cards/'+retrieveId)
+      .then(response => response.json())
+      .then((data) => {
+        //console.log(JSON.stringify(data.title))
+        const cardDetail = document.querySelector('.modal-body');
+        cardDetail.id = `${data.id}`;
+        cardDetail.innerHTML = `
+        Title: <input type="text" id="title" value=${JSON.stringify(data.title)}><br/>
+        Description: <input type="text" id="description" value=${JSON.stringify(data.description)}><br/>
+        Column: <input type="text" id="columnId" value=${JSON.stringify(data.columnId)}><br/>
+        <button type="button" onclick="editCard(event)">Save changes</button>`
+        console.log(cardDetail)
+      })
+}
+
 function editCard(event) {
-    console.log(event)
+    //console.log(event)
     const editId = event.target.parentNode.id
     console.log('in edit', editId)
-    fetch('http://localhost:3000/cards'+editId, {
+    let title = document.getElementById('title').value
+    let description = document.getElementById('description').value
+    let columnId = document.getElementById('columnId').value
+    fetch('http://localhost:3000/cards/'+editId, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
