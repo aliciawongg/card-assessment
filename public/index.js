@@ -152,7 +152,60 @@ function editCard(event) {
       .then(response => response.json())
       .then(data => console.log(data))
 }
-
+//search
+function handleSearch(searchText) {
+    //clear cards in current view
+    // const columnsAll = document.getElementsByTagName('my-column')
+    // console.log(columnsAll)
+    // for (let j=0; j<columnsAll.length; j++){
+    //     while (columnsAll[j].hasChildNodes()) {
+    //         columnsAll[j].removeChild(columnsAll[j].firstChild);
+    //     }
+    // }
+    const cardsAll = document.getElementsByTagName('my-card')
+    console.log(cardsAll)
+    do {
+        for (let j=0; j<cardsAll.length; j++){
+            cardsAll[j].remove()
+        }
+    }
+    while (cardsAll.length > 0);
+    
+    console.log('after', cardsAll)
+    const input = document.getElementById('searchText').value.toLowerCase()
+    console.log('input word: ', input)
+    fetch('http://localhost:3000/cards/')
+        .then(response => response.json())
+        .then((data) => 
+             {
+                for ( let i=0; i<data.length; i++) {
+                    if( data[i].title.toLowerCase().includes(input) || 
+                    data[i].description.toLowerCase().includes(input) ||
+                    JSON.stringify(data[i].columnId).includes(input) ) {
+                        console.log(data[i])
+                        const searchResultCard = document.createElement('my-card');
+                        searchResultCard.id = `${data[i].id}`
+                        searchResultCard.draggable = 'true'
+                        searchResultCard.innerHTML = `
+                            ${data[i].title}<br/>
+                            Description: ${data[i].description}<br/>
+                            Column: ${data[i].columnId}<br/>
+                            <button type="button" data-toggle="modal" data-target="#editModal" id=${data[i].id} onclick="retrieveCardDetails()">Edit</button>
+                            <input type="submit" value = "Delete" onclick="deleteCard(event)">
+                            <br/>`;
+                        if (data[i].columnId == 1) {
+                            document.getElementById('column 1').appendChild(searchResultCard);
+                        } else {
+                            document.getElementById('column 2').appendChild(searchResultCard);
+                        }
+                    } 
+                    // else {
+                    //     console.log ("couldn't find anything that matched your search")  
+                    // }
+                }
+            }
+        )
+}
 //drag and drop cards
 
 var allCards = document.getElementsByTagName("my-card");
