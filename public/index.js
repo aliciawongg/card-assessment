@@ -113,7 +113,7 @@ function deleteCard(event) {
 function retrieveCardDetails() {
     //console.log(event)
     const retrieveId = event.target.id
-    console.log(retrieveId)
+    console.log('editing',retrieveId)
     fetch('http://localhost:3000/cards/'+retrieveId)
       .then(response => response.json())
       .then((data) => {
@@ -121,9 +121,9 @@ function retrieveCardDetails() {
         const cardDetail = document.querySelector('.modal-body');
         cardDetail.id = `${data.id}`;
         cardDetail.innerHTML = `
-        Title: <input type="text" id="title" value=${JSON.stringify(data.title)}><br/>
-        Description: <input type="text" id="description" value=${JSON.stringify(data.description)}><br/>
-        Column: <input type="text" id="columnId" value=${JSON.stringify(data.columnId)}><br/>
+        Title: <input type="text" id="editTitle" value=${JSON.stringify(data.title)}><br/>
+        Description: <input type="text" id="editDescription" value=${JSON.stringify(data.description)}><br/>
+        Column: <input type="text" id="editColumnId" value=${JSON.stringify(data.columnId)}><br/>
         <button type="button" onclick="editCard(event)">Save changes</button>`
         console.log(cardDetail)
       })
@@ -133,9 +133,9 @@ function editCard(event) {
     //console.log(event)
     const editId = event.target.parentNode.id
     console.log('in edit', editId)
-    let title = document.getElementById('title').value
-    let description = document.getElementById('description').value
-    let columnId = document.getElementById('columnId').value
+    let title = document.getElementById('editTitle').value
+    let description = document.getElementById('editDescription').value
+    let columnId = document.getElementById('editColumnId').value
     fetch('http://localhost:3000/cards/'+editId, {
         headers: {
             'Accept': 'application/json',
