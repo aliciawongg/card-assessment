@@ -1,3 +1,5 @@
+const cardsAll = document.getElementsByTagName('my-card')
+
 // column component
 class MyColumn extends HTMLElement {
     constructor() {
@@ -102,7 +104,15 @@ function deleteCard(event) {
         }),    
     })
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+                do {
+                    for (let j=0; j<cardsAll.length; j++){
+                        cardsAll[j].remove()
+                    }
+                }
+                while (cardsAll.length > 0);
+                getCardInfo()
+        })
 }
 
 //edit card
@@ -147,11 +157,8 @@ function editCard(event) {
 
 //search
 function handleSearch(searchText) {
-    const cardsAll = document.getElementsByTagName('my-card')
-    console.log(cardsAll)
     do {
         for (let j=0; j<cardsAll.length; j++){
-            //console.log(cardsAll[j])
             cardsAll[j].remove()
         }
     }
@@ -205,31 +212,31 @@ function handleSearch(searchText) {
 }
 //drag and drop cards
 
-var allCards = document.getElementsByTagName("my-card");
-//console.log(allCards);
-Array.from(allCards).forEach(addDnDHandlers);
-console.log('tagged')
-console.log(allCards);
+// var allCards = document.getElementsByTagName("my-card");
+// //console.log(allCards);
+// Array.from(allCards).forEach(addDnDHandlers);
+// console.log('tagged')
+// console.log(allCards);
 
-function addDnDHandlers(element) {   
-    element.addEventListener('drag',drag(event));
-    element.addEventListener('dragover',allowDrop(event));
-    element.addEventListener('drop',drop(event));
-}
+// function addDnDHandlers(element) {   
+//     element.addEventListener('drag',drag(event));
+//     element.addEventListener('dragover',allowDrop(event));
+//     element.addEventListener('drop',drop(event));
+// }
 
-function drag(event) {
-    console.log('dragging');
-    event.dataTransfer.setData("text", event.target.id);
-    console.log(event);
+// function drag(event) {
+//     console.log('dragging');
+//     event.dataTransfer.setData("text", event.target.id);
+//     console.log(event);
    
-}
+// }
 
-function allowDrop(event) {
-    event.preventDefault();
-}
+// function allowDrop(event) {
+//     event.preventDefault();
+// }
   
-function drop(event) {
-    event.preventDefault();
-    var data = event.dataTransfer.getData("text");
-    event.target.appendChild(document.getElementById(data));
-}
+// function drop(event) {
+//     event.preventDefault();
+//     var data = event.dataTransfer.getData("text");
+//     event.target.appendChild(document.getElementById(data));
+// }
