@@ -59,11 +59,7 @@ async function getCardInfo() {
             <button type="button" data-toggle="modal" data-target="#editModal" id=${card.id} onclick="retrieveCardDetails()">Edit</button>
             <input type="submit" value = "Delete" onclick="deleteCard(event)">
             <br/>`;
-        if (card.columnId == 1) {
-            document.getElementById('column 1').appendChild(newCard);
-        } else {
-            document.getElementById('column 2').appendChild(newCard);
-        }
+        document.getElementById(`column ${card.columnId}`).appendChild(newCard);
     })
 }
 
@@ -159,11 +155,7 @@ function editCard(event) {
                 Column: ${data.columnId}<br/>
                 <button type="button" data-toggle="modal" data-target="#editModal" id=${data.editId} onclick="retrieveCardDetails()">Edit</button>
                 <input type="submit" value = "Delete" onclick="deleteCard(event)"><br/>`;
-            if (data.columnId == 1) {
-                document.getElementById('column 1').appendChild(updateDetail);
-            } else {
-                document.getElementById('column 2').appendChild(updateDetail);
-            }
+            document.getElementById(`column ${data.columnId}`).appendChild(updateDetail)
         })
 }
 
@@ -202,11 +194,7 @@ function handleSearch(searchText) {
                         <button type="button" data-toggle="modal" data-target="#editModal" id=${data[i].id} onclick="retrieveCardDetails()">Edit</button>
                         <input type="submit" value = "Delete" onclick="deleteCard(event)">
                         <br/>`;
-                    if (data[i].columnId == 1) {
-                        document.getElementById('column 1').appendChild(searchResultCard);
-                    } else {
-                        document.getElementById('column 2').appendChild(searchResultCard);
-                    }
+                    document.getElementById(`column ${data[i].columnId}`).appendChild(searchResultCard);
                 } 
                 else {
                     noResultCount++
