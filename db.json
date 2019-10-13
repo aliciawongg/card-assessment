@@ -36,15 +36,9 @@
     },
     {
       "title": "card 100",
-      "description": "lorem",
-      "columnId": "1",
-      "id": 15
-    },
-    {
-      "title": "card 111",
-      "description": "morningggggg",
+      "description": "worksss fingers crossed",
       "columnId": "2",
-      "id": 16
+      "id": 15
     },
     {
       "title": "Card 4",
@@ -57,6 +51,18 @@
       "description": "hungrryyyyy can eat a ton",
       "columnId": "2",
       "id": 18
+    },
+    {
+      "title": "Card 160",
+      "description": "dinnertimeeeee!!!!!",
+      "columnId": "1",
+      "id": 19
+    },
+    {
+      "title": "card 201",
+      "description": "sunday funday",
+      "columnId": "1",
+      "id": 21
     }
   ]
 }

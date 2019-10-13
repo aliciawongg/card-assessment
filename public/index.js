@@ -14,7 +14,7 @@ window.addEventListener('load', ()=> {
 async function createColumn() {
     const response = await fetch('http://localhost:3000/columns');
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
 
     json.forEach((column) => {
         console.log(column.title);
@@ -23,7 +23,6 @@ async function createColumn() {
         newColumn.id = `column ${column.id}`
         newColumn.innerHTML = `<h2>${column.title}</h2>`;
         document.querySelector('.row').appendChild(newColumn);
-        
     })
 }
 
@@ -43,7 +42,7 @@ window.addEventListener('load', ()=> {
 async function getCardInfo() {
     const response = await fetch('http://localhost:3000/cards');
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
 
     json.forEach((card) => {
         console.log(card.title);
@@ -68,7 +67,6 @@ async function getCardInfo() {
 
 // create card
 function createCard(event) {
-
     let title = document.getElementById('title').value
     let description = document.getElementById('description').value
     let columnId = document.getElementById('columnId').value
@@ -84,15 +82,13 @@ function createCard(event) {
           description: description,
           columnId: columnId
         }),
-        
-      })
-      .then(response => response.json())
-      .then(data => console.log(data))
+    })
+        .then(response => response.json())
+        .then(data => console.log(data))
 }
 
 //delete card
 function deleteCard(event) {
-    //console.log(event)
     const deleteId = event.target.parentNode.id
     console.log('in delete', deleteId)
     fetch('http://localhost:3000/cards/'+deleteId, {
@@ -111,26 +107,23 @@ function deleteCard(event) {
 
 //edit card
 function retrieveCardDetails() {
-    //console.log(event)
     const retrieveId = event.target.id
     console.log('editing',retrieveId)
     fetch('http://localhost:3000/cards/'+retrieveId)
-      .then(response => response.json())
-      .then((data) => {
-        //console.log(JSON.stringify(data.title))
-        const cardDetail = document.querySelector('.modal-body');
-        cardDetail.id = `${data.id}`;
-        cardDetail.innerHTML = `
-        Title: <input type="text" id="editTitle" value=${JSON.stringify(data.title)}><br/>
-        Description: <input type="text" id="editDescription" value=${JSON.stringify(data.description)}><br/>
-        Column: <input type="text" id="editColumnId" value=${JSON.stringify(data.columnId)}><br/>
-        <button type="button" onclick="editCard(event)">Save changes</button>`
-        console.log(cardDetail)
-      })
+        .then(response => response.json())
+        .then((data) => {
+            const cardDetail = document.querySelector('.modal-body');
+            cardDetail.id = `${data.id}`;
+            cardDetail.innerHTML = `
+            Title: <input type="text" id="editTitle" value=${JSON.stringify(data.title)}><br/>
+            Description: <input type="text" id="editDescription" value=${JSON.stringify(data.description)}><br/>
+            Column: <input type="text" id="editColumnId" value=${JSON.stringify(data.columnId)}><br/>
+            <button type="button" onclick="editCard(event)">Save changes</button>`
+            console.log(cardDetail)
+        })
 }
 
 function editCard(event) {
-    //console.log(event)
     const editId = event.target.parentNode.id
     console.log('in edit', editId)
     let title = document.getElementById('editTitle').value
@@ -147,64 +140,68 @@ function editCard(event) {
           description: description,
           columnId: columnId
         }),
-        
-      })
-      .then(response => response.json())
-      .then(data => console.log(data))
+    })
+        .then(response => response.json())
+        .then(data => console.log(data))
 }
+
 //search
 function handleSearch(searchText) {
-    //clear cards in current view
-    // const columnsAll = document.getElementsByTagName('my-column')
-    // console.log(columnsAll)
-    // for (let j=0; j<columnsAll.length; j++){
-    //     while (columnsAll[j].hasChildNodes()) {
-    //         columnsAll[j].removeChild(columnsAll[j].firstChild);
-    //     }
-    // }
     const cardsAll = document.getElementsByTagName('my-card')
     console.log(cardsAll)
     do {
         for (let j=0; j<cardsAll.length; j++){
+            //console.log(cardsAll[j])
             cardsAll[j].remove()
         }
     }
     while (cardsAll.length > 0);
     
-    console.log('after', cardsAll)
+    const msg = document.getElementById('nilMsg')
+    if (msg) {
+        msg.remove()
+    }
+    //check through json for keyword
     const input = document.getElementById('searchText').value.toLowerCase()
     console.log('input word: ', input)
     fetch('http://localhost:3000/cards/')
         .then(response => response.json())
-        .then((data) => 
-             {
-                for ( let i=0; i<data.length; i++) {
-                    if( data[i].title.toLowerCase().includes(input) || 
-                    data[i].description.toLowerCase().includes(input) ||
-                    JSON.stringify(data[i].columnId).includes(input) ) {
-                        console.log(data[i])
-                        const searchResultCard = document.createElement('my-card');
-                        searchResultCard.id = `${data[i].id}`
-                        searchResultCard.draggable = 'true'
-                        searchResultCard.innerHTML = `
-                            ${data[i].title}<br/>
-                            Description: ${data[i].description}<br/>
-                            Column: ${data[i].columnId}<br/>
-                            <button type="button" data-toggle="modal" data-target="#editModal" id=${data[i].id} onclick="retrieveCardDetails()">Edit</button>
-                            <input type="submit" value = "Delete" onclick="deleteCard(event)">
-                            <br/>`;
-                        if (data[i].columnId == 1) {
-                            document.getElementById('column 1').appendChild(searchResultCard);
-                        } else {
-                            document.getElementById('column 2').appendChild(searchResultCard);
-                        }
-                    } 
-                    // else {
-                    //     console.log ("couldn't find anything that matched your search")  
-                    // }
+        .then((data) => {
+            let noResultCount = 0
+            console.log('start: ', noResultCount)
+            for ( let i=0; i<data.length; i++) {
+                if( data[i].title.toLowerCase().includes(input) || 
+                data[i].description.toLowerCase().includes(input) ||
+                JSON.stringify(data[i].columnId).includes(input) ) {
+                    const searchResultCard = document.createElement('my-card');
+                    searchResultCard.id = `${data[i].id}`
+                    searchResultCard.draggable = 'true'
+                    searchResultCard.innerHTML = `
+                        ${data[i].title}<br/>
+                        Description: ${data[i].description}<br/>
+                        Column: ${data[i].columnId}<br/>
+                        <button type="button" data-toggle="modal" data-target="#editModal" id=${data[i].id} onclick="retrieveCardDetails()">Edit</button>
+                        <input type="submit" value = "Delete" onclick="deleteCard(event)">
+                        <br/>`;
+                    if (data[i].columnId == 1) {
+                        document.getElementById('column 1').appendChild(searchResultCard);
+                    } else {
+                        document.getElementById('column 2').appendChild(searchResultCard);
+                    }
+                } 
+                else {
+                    noResultCount++
+                    console.log('start: ', noResultCount)
+                    if (noResultCount === data.length) {
+                        const noResult = document.createElement('div')
+                        noResult.id = 'nilMsg'
+                        console.log('msg id', noResult.id)
+                        noResult.innerHTML = `Couldn't find anything that matched your search`
+                        document.getElementById('column 1').appendChild(noResult)
+                    }
                 }
             }
-        )
+        })
 }
 //drag and drop cards
 
