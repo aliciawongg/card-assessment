@@ -105,13 +105,9 @@ function deleteCard(event) {
     })
         .then(response => response.json())
         .then(data => {
-                do {
-                    for (let j=0; j<cardsAll.length; j++){
-                        cardsAll[j].remove()
-                    }
-                }
-                while (cardsAll.length > 0);
-                getCardInfo()
+            console.log(data)
+            const cardDelete = document.getElementById(deleteId);
+            cardDelete.remove()
         })
 }
 
@@ -128,7 +124,7 @@ function retrieveCardDetails() {
             Title: <input type="text" id="editTitle" value=${JSON.stringify(data.title)}><br/>
             Description: <input type="text" id="editDescription" value=${JSON.stringify(data.description)}><br/>
             Column: <input type="text" id="editColumnId" value=${JSON.stringify(data.columnId)}><br/>
-            <button type="button" onclick="editCard(event)">Save changes</button>`
+            <button type="button" data-dismiss="modal" aria-label="Close" onclick="editCard(event)">Save changes</button>`
             console.log(cardDetail)
         })
 }
@@ -152,7 +148,23 @@ function editCard(event) {
         }),
     })
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data)
+            const updateDetail = document.getElementById(editId);
+            console.log(updateDetail)
+            updateDetail.remove()
+            updateDetail.innerHTML = `
+                ${data.title}<br/>
+                Description: ${data.description}<br/>
+                Column: ${data.columnId}<br/>
+                <button type="button" data-toggle="modal" data-target="#editModal" id=${data.editId} onclick="retrieveCardDetails()">Edit</button>
+                <input type="submit" value = "Delete" onclick="deleteCard(event)"><br/>`;
+            if (data.columnId == 1) {
+                document.getElementById('column 1').appendChild(updateDetail);
+            } else {
+                document.getElementById('column 2').appendChild(updateDetail);
+            }
+        })
 }
 
 //search
